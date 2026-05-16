@@ -288,11 +288,9 @@ function saveApiUrl(){
 
 async function callApi(action, body={}){
   if(!apiUrl) throw new Error('未設定 API URL');
-  const res = await fetch(apiUrl + '?action=' + action, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action, ...body })
-  });
+  const payload = encodeURIComponent(JSON.stringify(body));
+  const url = apiUrl + '?action=' + action + '&payload=' + payload;
+  const res = await fetch(url, { method: 'GET', redirect: 'follow' });
   return res.json();
 }
 
